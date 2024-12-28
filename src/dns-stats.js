@@ -22,9 +22,39 @@ const { NotImplementedError } = require('../extensions/index.js');
  * }
  *
  */
-function getDNSStats(/* domains */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function getDNSStats(domains) {
+let minWord = domains[0];
+let maxWord = domains[0];
+for(let i = 0; i < domains.length; i += 1) {
+    if(domains[i].length < minWord.length) {
+        minWord = domains[i];
+    }
+    if(domains[i].length > maxWord.length) {
+        maxWord = domains[i];
+    }
+}
+
+const indexOfDot = minWord.indexOf('.');
+const country = minWord.slice(indexOfDot);
+let numOfCountry = 0;
+for(let i = 0; i < domains.length; i += 1) {
+    if(domains[i].includes(country)) {
+        numOfCountry += 1;
+    }
+}
+let numOfMinWord = 0;
+for(let i = 0; i < domains.length; i += 1) {
+    if(domains[i].includes(minWord)) {
+        numOfMinWord += 1;
+    }
+}
+
+let map = new Map();
+map.set(`${minWord.slice(indexOfDot)}`, numOfCountry);
+map.set(`${minWord.slice(indexOfDot)+'.'+minWord.slice(0, indexOfDot)}`, numOfMinWord);
+let obj = Object.fromEntries(map);
+
+return obj
 }
 
 module.exports = {
